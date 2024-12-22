@@ -104,6 +104,7 @@
     <img id="flashGirl" src="face_left_brenna.gif" class="flash-image" alt="GIRL">
 
     <script>
+        // Puzzle Grid
         const gridData = [
             ['Y', 'O', 'Y', 'F', 'N', 'P', 'B', 'L', 'U', 'O', 'R', 'H', 'O', 'K', 'W', 'U', 'F', 'W'],
             ['G', 'S', 'B', 'K', 'J', 'N', 'C', 'R', 'H', 'F', 'V', 'C', 'G', 'T', 'S', 'C', 'C', 'K'],
@@ -127,17 +128,13 @@
         let boyCount = 0;
         let girlCount = 0;
         const foundWords = new Set();
-        let isFlashing = false;
 
         const showFlashImage = (imageElement) => {
-            if (isFlashing) return;
-            isFlashing = true;
             gridElement.classList.add("disabled");
             imageElement.style.display = "block";
             setTimeout(() => {
                 imageElement.style.display = "none";
                 gridElement.classList.remove("disabled");
-                isFlashing = false;
             }, 2000);
         };
 
@@ -183,7 +180,6 @@
 
                     boyCount = 0;
                     girlCount = 0;
-                    foundWords.clear();
 
                     gridData.forEach((innerRow, innerRowIndex) => {
                         innerRow.forEach((_, innerColIndex) => {
