@@ -23,6 +23,14 @@
             justify-content: center;
         }
 
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
         h1 {
             color: #333;
             font-size: 1.5em;
@@ -102,8 +110,10 @@
 </head>
 <body>
     <div class="container">
-        <img src="face_right_michael.gif" alt="Stork carrying baby" class="stork-image">
-        <img src="face_left_brenna.gif" alt="Stork carrying baby" class="stork-image-right">
+        <div class="header">
+            <img src="face_right_michael.gif" alt="Stork carrying baby" class="stork-image">
+            <img src="face_left_brenna.gif" alt="Stork carrying baby" class="stork-image-right">
+        </div>
         <h1>Is It A BOY or GIRL?</h1>
         <p>Find <b>BOY</b> or <b>GIRL</b> in the puzzle.</p>
         <p>Words are hidden left-right, up-down, and diagonally.</p>
