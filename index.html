@@ -168,6 +168,37 @@
         const girlCountElement = document.getElementById("girlCount");
         let boyCount = 0;
         let girlCount = 0;
+        const foundWords = new Set();
+
+        const directions = [
+            { dr: 0, dc: 1 }, // Right
+            { dr: 1, dc: 0 }, // Down
+            { dr: 1, dc: 1 }, // Diagonal down-right
+            { dr: -1, dc: 1 } // Diagonal up-right
+        ];
+
+        const checkWord = (row, col, word) => {
+            for (const { dr, dc } of directions) {
+                let match = true;
+                let cells = [];
+                for (let i = 0; i < word.length; i++) {
+                    const r = row + dr * i;
+                    const c = col + dc * i;
+                    if (r < 0 || c < 0 || r >= gridData.length || c >= gridData[0].length || gridData[r][c] !== word[i]) {
+                        match = false;
+                        break;
+                    }
+                    cells.push(`${r},${c}`);
+                }
+                if (match && cells.every(cell => document.querySelector(`[data-row='${cell.split(",")[0]}'][data-col='${cell.split(",")[1]}']`).classList.contains("highlighted"))) {
+                    if (!foundWords.has(cells.join("|"))) {
+                        foundWords.add(cells.join("|"));
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
 
         const checkGameEnd = () => {
             if (boyCount === 10) {
@@ -192,13 +223,32 @@
                         cellElement.classList.add("highlighted");
                     }
 
-                    // Example logic to update boyCount and girlCount
-                    if (cell === "B") boyCount++; // Simplified for demo purposes
-                    if (cell === "G") girlCount++;
+                    let newBoyFound = false;
+                    let newGirlFound = false;
 
+                    gridData.forEach((innerRow, innerRowIndex) => {
+                        innerRow.forEach((_, innerColIndex) => {
+                            // Check for a new "BOY" word
+                            if (checkWord(innerRowIndex, innerColIndex, "BOY") && !foundWords.has(`BOY:${innerRowIndex},${innerColIndex}`)) {
+                                foundWords.add(`BOY:${innerRowIndex},${innerColIndex}`);
+                                boyCount++;
+                                newBoyFound = true;
+                            }
+
+                            // Check for a new "GIRL" word
+                            if (checkWord(innerRowIndex, innerColIndex, "GIRL") && !foundWords.has(`GIRL:${innerRowIndex},${innerColIndex}`)) {
+                                foundWords.add(`GIRL:${innerRowIndex},${innerColIndex}`);
+                                girlCount++;
+                                newGirlFound = true;
+                            }
+                        });
+                    });
+
+                    // Update the counters on the page
                     boyCountElement.textContent = boyCount;
                     girlCountElement.textContent = girlCount;
 
+                    // Check if the game has ended
                     checkGameEnd();
                 });
 
