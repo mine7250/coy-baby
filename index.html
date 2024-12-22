@@ -11,9 +11,9 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden;
             font-family: Arial, sans-serif;
             text-align: center;
+            overflow: auto; /* Allow zooming */
         }
 
         .container {
@@ -177,6 +177,13 @@
             { dr: -1, dc: 1 } // Diagonal up-right
         ];
 
+        const showFlashImage = (imageElement) => {
+            imageElement.style.display = "block";
+            setTimeout(() => {
+                imageElement.style.display = "none";
+            }, 2000); // Display the image for 2 seconds
+        };
+
         const checkWord = (row, col, word) => {
             for (const { dr, dc } of directions) {
                 let match = true;
@@ -203,9 +210,11 @@
         const checkGameEnd = () => {
             if (boyCount === 10) {
                 document.body.style.backgroundColor = "lightblue";
+                showFlashImage(document.getElementById("flashBoy"));
                 alert("It's a BOY!");
             } else if (girlCount === 10) {
                 document.body.style.backgroundColor = "lightpink";
+                showFlashImage(document.getElementById("flashGirl"));
                 alert("It's a GIRL!");
             }
         };
@@ -233,6 +242,7 @@
                                 foundWords.add(`BOY:${innerRowIndex},${innerColIndex}`);
                                 boyCount++;
                                 newBoyFound = true;
+				showFlashImage(flashBoy);
                             }
 
                             // Check for a new "GIRL" word
@@ -240,6 +250,7 @@
                                 foundWords.add(`GIRL:${innerRowIndex},${innerColIndex}`);
                                 girlCount++;
                                 newGirlFound = true;
+				showFlashImage(flashGirl);
                             }
                         });
                     });
